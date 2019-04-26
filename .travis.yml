@@ -25,8 +25,7 @@ matrix:
       go: "1.x"
 
 install:
-  - go install -i ./...
+  - sh install.sh
 
 script:
-  - go get -v -t ./...
-  - go test ./...
+  - sh test.sh

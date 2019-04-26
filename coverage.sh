@@ -1,0 +1,3 @@
+#!/bin/sh -eu
+go test -coverprofile coverage.prof ./...
+go tool cover -html coverage.prof -o coverage.html

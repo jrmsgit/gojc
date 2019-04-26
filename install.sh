@@ -1,0 +1,3 @@
+#!/bin/sh -eu
+go env | grep -E 'GOBIN|GOEXE|GOPATH' | sort
+go install -v -i ./...

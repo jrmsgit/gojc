@@ -1,0 +1,3 @@
+#!/bin/sh -eu
+go clean -v -i ./...
+go clean -cache
