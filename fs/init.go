@@ -9,13 +9,14 @@ import (
 	"encoding/base64"
 )
 
+var prefix string
 var storage map[string]*zip.File
 var b64 = base64.StdEncoding.DecodeString
 
-func Init(b64zip string) error {
+func Init(prefix, zipfile string) error {
 	storage = make(map[string]*zip.File)
-	if b64zip != "" {
-		blob, err := b64(b64zip)
+	if zipfile != "" {
+		blob, err := b64(zipfile)
 		if err != nil {
 			return err
 		}

@@ -6,10 +6,11 @@ package fs
 import (
 	"io"
 	"os"
+	"path/filepath"
 )
 
-func Open(filename string) (io.ReadCloser, error) {
-	fh, err := os.Open(filename)
+func Open(prefix, filename string) (io.ReadCloser, error) {
+	fh, err := os.Open(filepath.Join(prefix, filename))
 	if err != nil {
 		if zipExists(filename) {
 			return zipOpen(filename)

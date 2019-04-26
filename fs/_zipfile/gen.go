@@ -24,17 +24,19 @@ var b64 = base64.StdEncoding.EncodeToString
 var sprintf = fmt.Sprintf
 
 var pkgName string
+var prefix string
 
 func init() {
 	cwd, _ := os.Getwd()
 	pkgName = fp.Base(cwd)
 	flag.StringVar(&pkgName, "package", pkgName, "package `name`")
+	flag.StringVar(&prefix, "prefix", "", "install prefix `path`")
 }
 
 func main() {
 	flag.Parse()
 	args := flag.Args()
-	//~ fmt.Printf("zipfs gen %v\n", args)
+	fmt.Printf("zip gen pkg='%s' prefix='%s' %v\n", pkgName, prefix, args)
 
 	files := make([]string, 0)
 	for _, patt := range args {
@@ -96,18 +98,20 @@ func write() error {
 	if lloaded == 0 {
 		return nil
 	}
+	zipfile := b64(zbuf.Bytes())
 	dst := new(bytes.Buffer)
 	_, err := dst.WriteString(sprintf("package %s\n", pkgName))
 	check(err)
 	_, err = dst.WriteString("\n")
 	check(err)
-	//~ _, err = dst.WriteString("func init() {\n")
-	//~ check(err)
-	zipfile := b64(zbuf.Bytes())
-	_, err = dst.WriteString(sprintf("var zipfile string = \"%s\"\n", zipfile))
+	_, err = dst.WriteString("func init() {\n")
 	check(err)
-	//~ _, err = dst.WriteString("}\n")
+	//~ _, err = dst.WriteString(sprintf("\tprefix = \"%s\"\n", prefix))
 	//~ check(err)
+	_, err = dst.WriteString(sprintf("\tzipfile = \"%s\"\n", zipfile))
+	check(err)
+	_, err = dst.WriteString("}\n")
+	check(err)
 	_, err = dst.WriteString("\n")
 	check(err)
 	for _, fn := range loaded {
