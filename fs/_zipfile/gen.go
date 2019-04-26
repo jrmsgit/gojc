@@ -34,7 +34,7 @@ func init() {
 func main() {
 	flag.Parse()
 	args := flag.Args()
-	fmt.Printf("zipfile %v\n", args)
+	//~ fmt.Printf("zipfs gen %v\n", args)
 
 	files := make([]string, 0)
 	for _, patt := range args {
@@ -91,6 +91,11 @@ func load(filename string) error {
 }
 
 func write() error {
+	lloaded := len(loaded)
+	fmt.Printf("fs.zip %d files\n", lloaded)
+	if lloaded == 0 {
+		return nil
+	}
 	dst := new(bytes.Buffer)
 	_, err := dst.WriteString(sprintf("package %s\n", pkgName))
 	check(err)
@@ -99,10 +104,6 @@ func write() error {
 	//~ _, err = dst.WriteString("func init() {\n")
 	//~ check(err)
 	zipfile := b64(zbuf.Bytes())
-	check(ioutil.WriteFile("fs.zip", zbuf.Bytes(), 0640))
-	check(ioutil.WriteFile("fs.zip.b64", []byte(zipfile), 0640))
-	fmt.Printf("fs.zip %d\n", zbuf.Len())
-	fmt.Printf("fs.zip.b64 %d\n", len(zipfile))
 	_, err = dst.WriteString(sprintf("var zipfile string = \"%s\"\n", zipfile))
 	check(err)
 	//~ _, err = dst.WriteString("}\n")
@@ -113,5 +114,7 @@ func write() error {
 		_, err = dst.WriteString(sprintf("// %s\n", fn))
 		check(err)
 	}
+	fmt.Printf("fs.zip %d\n", zbuf.Len())
+	check(ioutil.WriteFile("fs.zip", zbuf.Bytes(), 0640))
 	return ioutil.WriteFile("zipfs.go", dst.Bytes(), 0640)
 }
