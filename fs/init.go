@@ -7,14 +7,22 @@ import (
 	"archive/zip"
 	"bytes"
 	"encoding/base64"
+	"errors"
 )
 
 var prefix string
-var storage map[string]*zip.File
+var storage map[string]map[string]*zip.File
 var b64 = base64.StdEncoding.DecodeString
 
+func init() {
+	storage = make(map[string]map[string]*zip.File)
+}
+
 func Init(prefix, zipfile string) error {
-	storage = make(map[string]*zip.File)
+	if _, done := storage[prefix]; done {
+		return errors.New("zip fs init already done for prefix " + prefix)
+	}
+	storage[prefix] = make(map[string]*zip.File)
 	if zipfile != "" {
 		blob, err := b64(zipfile)
 		if err != nil {
@@ -27,7 +35,7 @@ func Init(prefix, zipfile string) error {
 			return err
 		}
 		for _, f := range zr.File {
-			storage[f.Name] = f
+			storage[prefix][f.Name] = f
 		}
 	}
 	return nil

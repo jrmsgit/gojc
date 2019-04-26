@@ -12,20 +12,20 @@ import (
 func Open(prefix, filename string) (io.ReadCloser, error) {
 	fh, err := os.Open(filepath.Join(prefix, filename))
 	if err != nil {
-		if zipExists(filename) {
-			return zipOpen(filename)
+		if zipExists(prefix, filename) {
+			return zipOpen(prefix, filename)
 		}
 		return nil, err
 	}
 	return fh, nil
 }
 
-func zipExists(filename string) bool {
-	_, ok := storage[filename]
+func zipExists(prefix, filename string) bool {
+	_, ok := storage[prefix][filename]
 	return ok
 }
 
-func zipOpen(filename string) (io.ReadCloser, error) {
-	fh := storage[filename]
+func zipOpen(prefix, filename string) (io.ReadCloser, error) {
+	fh := storage[prefix][filename]
 	return fh.Open()
 }
