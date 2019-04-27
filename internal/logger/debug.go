@@ -5,7 +5,6 @@ package logger
 
 import (
 	"fmt"
-	"os"
 	"runtime"
 )
 
@@ -15,5 +14,5 @@ func debug(format string, args ...interface{}) {
 	if ok {
 		tag = fmt.Sprintf("%s:%d: ", fn[shortIdx:], ln)
 	}
-	fmt.Fprintf(os.Stderr, tag+format+"\n", args...)
+	fmt.Fprintf(errfh, tag+format+"\n", args...)
 }

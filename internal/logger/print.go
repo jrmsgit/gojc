@@ -8,10 +8,10 @@ import (
 )
 
 func printf(format string, args ...interface{}) {
-	fmt.Printf(format+"\n", args...)
+	fmt.Fprintf(outfh, format+"\n", args...)
 }
 
 func print(args ...interface{}) {
-	fmt.Print(args...)
-	fmt.Print("\n")
+	fmt.Fprint(outfh, args...)
+	fmt.Fprint(outfh, "\n")
 }

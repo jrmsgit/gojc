@@ -5,6 +5,7 @@ package logger // github.com/jrmsdev/gojc/internal/logger
 
 import (
 	"errors"
+	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -21,6 +22,10 @@ type Logger struct {
 }
 
 var shortIdx int
+
+var outfh *os.File = os.Stdout
+var errfh *os.File = os.Stderr
+
 var Levels string = "debug, warn, error or quiet"
 
 func New(level string) (*Logger, error) {

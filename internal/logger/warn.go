@@ -5,11 +5,10 @@ package logger
 
 import (
 	"fmt"
-	"os"
 )
 
 func warnf(format string, args ...interface{}) {
-	fmt.Fprintf(os.Stderr, "W: "+format+"\n", args...)
+	fmt.Fprintf(errfh, "W: "+format+"\n", args...)
 }
 
 func warn(err error) {
