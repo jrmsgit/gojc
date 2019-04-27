@@ -1,2 +1,3 @@
 #!/bin/sh -eu
-go test ./...
+ARGS=${@:-'./...'}
+go test ${ARGS}
