@@ -94,7 +94,6 @@ func load(filename string) error {
 
 func write() error {
 	lloaded := len(loaded)
-	fmt.Printf("fs.zip %d files\n", lloaded)
 	if lloaded == 0 {
 		return nil
 	}
@@ -118,7 +117,7 @@ func write() error {
 		_, err = dst.WriteString(sprintf("// %s\n", fn))
 		check(err)
 	}
-	fmt.Printf("fs.zip %d\n", zbuf.Len())
+	fmt.Printf("fs.zip %d files %d bytes\n", lloaded, zbuf.Len())
 	check(ioutil.WriteFile("fs.zip", zbuf.Bytes(), 0640))
 	return ioutil.WriteFile("zipfs.go", dst.Bytes(), 0640)
 }

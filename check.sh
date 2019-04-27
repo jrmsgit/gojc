@@ -1,4 +1,4 @@
 #!/bin/sh -eu
 go vet ./...
 gofmt -s -l .
-exec ./scripts/test.sh
+exec ./test.sh
