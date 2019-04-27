@@ -5,8 +5,8 @@ package logger // github.com/jrmsdev/gojc/internal/logger
 
 import (
 	"errors"
+	"io"
 	"os"
-	"path/filepath"
 	"runtime"
 	"strings"
 )
@@ -23,8 +23,8 @@ type Logger struct {
 
 var shortIdx int
 
-var outfh *os.File = os.Stdout
-var errfh *os.File = os.Stderr
+var outfh io.Writer = os.Stdout
+var errfh io.Writer = os.Stderr
 
 var Levels string = "debug, warn, error or quiet"
 
@@ -59,9 +59,12 @@ func New(level string) (*Logger, error) {
 func getShortIdx() int {
 	_, fn, _, ok := runtime.Caller(0)
 	if ok {
-		idx := strings.Index(fn, "github.com")
-		idx += 10 + len(string(filepath.Separator))
-		return idx
+		return strings.Index(fn, "github.com")
 	}
 	return 0
+}
+
+func Testing(w io.Writer) {
+	outfh = w
+	errfh = w
 }
