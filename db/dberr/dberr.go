@@ -13,6 +13,7 @@ var reg = map[string]error{
 	"NoDriver":      errors.New("db driver not set"),
 	"NoDBName":      errors.New("db name not set"),
 	"IsOpen":        errors.New("db already open"),
+	"NotOpen":       errors.New("db is not open"),
 	"UriParse":      nil,
 	"InvalidDriver": nil,
 }

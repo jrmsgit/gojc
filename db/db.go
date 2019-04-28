@@ -25,3 +25,7 @@ func (d *DB) Failed() bool {
 func (d *DB) Error() error {
 	return dberr.Last()
 }
+
+func (d *DB) Close() error {
+	return d.eng.Close()
+}

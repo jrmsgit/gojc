@@ -10,6 +10,7 @@ import (
 
 type Engine interface {
 	Open(*uri.URI) error
+	Close() error
 }
 
 type EngineCreator func() Engine
