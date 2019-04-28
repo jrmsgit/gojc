@@ -10,10 +10,10 @@ import (
 
 var last error
 var reg = map[string]error{
-	"NoDriver": errors.New("db driver not set"),
-	"NoDBName": errors.New("db name not set"),
-	"IsOpen":   errors.New("db already open"),
-	"UriParse": nil,
+	"NoDriver":      errors.New("db driver not set"),
+	"NoDBName":      errors.New("db name not set"),
+	"IsOpen":        errors.New("db already open"),
+	"UriParse":      nil,
 	"InvalidDriver": nil,
 }
 

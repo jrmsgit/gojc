@@ -20,5 +20,8 @@ func Open(rawuri string) (*DB, error) {
 	} else {
 		d.eng = eng
 	}
+	if err := d.eng.Open(d.uri); err != nil {
+		return nil, err
+	}
 	return d, nil
 }
