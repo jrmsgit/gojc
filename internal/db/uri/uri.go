@@ -14,7 +14,7 @@ type URI struct {
 	Host     string
 	Port     string
 	Username string
-	encPassw string
+	Password string
 }
 
 func Parse(rawuri string) (*URI, error) {
@@ -31,7 +31,7 @@ func Parse(rawuri string) (*URI, error) {
 	r.Host = u.Hostname()
 	r.Port = u.Port()
 	r.Username = u.User.Username()
-	r.encPassw, _ = u.User.Password()
+	r.Password, _ = u.User.Password()
 	return r, nil
 }
 
@@ -43,9 +43,4 @@ func checkArgs(u *url.URL) error {
 		return errors.New("db name not set")
 	}
 	return nil
-}
-
-func (u *URI) GetPassword() string {
-	// TODO: return decoded encPassw
-	return u.encPassw
 }
