@@ -4,6 +4,7 @@
 package db
 
 import (
+	"github.com/jrmsdev/gojc/internal/db/engine"
 	"github.com/jrmsdev/gojc/internal/db/uri"
 )
 
@@ -13,6 +14,11 @@ func Open(rawuri string) (*DB, error) {
 		return nil, err
 	} else {
 		d.uri = u
+	}
+	if eng, err := engine.Get(d.uri); err != nil {
+		return nil, err
+	} else {
+		d.eng = eng
 	}
 	return d, nil
 }

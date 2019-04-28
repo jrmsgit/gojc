@@ -10,8 +10,12 @@ import (
 )
 
 type DB struct {
-	eng engine.Engine
 	uri *uri.URI
+	eng engine.Engine
+}
+
+func (d *DB) Name() string {
+	return d.uri.DBName
 }
 
 func (d *DB) Failed() bool {

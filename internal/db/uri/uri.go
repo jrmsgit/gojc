@@ -21,7 +21,7 @@ type URI struct {
 func Parse(rawuri string) (*URI, error) {
 	u, err := url.Parse(rawuri)
 	if err != nil {
-		return nil, dberr.SetError("UriParse", err)
+		return nil, dberr.SetError("UriParse", "%s", err)
 	}
 	if err := checkArgs(u); err != nil {
 		return nil, err

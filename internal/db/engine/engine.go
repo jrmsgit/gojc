@@ -4,6 +4,7 @@
 package engine
 
 import (
+	"github.com/jrmsdev/gojc/db/dberr"
 	"github.com/jrmsdev/gojc/internal/db/uri"
 )
 
@@ -36,4 +37,12 @@ func Drivers() []string {
 func HasDriver(name string) bool {
 	_, ok := reg[name]
 	return ok
+}
+
+func Get(u *uri.URI) (Engine, error) {
+	mk, ok := reg[u.Driver]
+	if !ok {
+		return nil, dberr.SetError("InvalidDriver", "invalid driver %s", u.Driver)
+	}
+	return mk(), nil
 }

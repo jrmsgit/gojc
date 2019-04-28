@@ -5,6 +5,7 @@ package dberr
 
 import (
 	"errors"
+	"fmt"
 )
 
 var last error
@@ -13,6 +14,7 @@ var reg = map[string]error{
 	"NoDBName": errors.New("db name not set"),
 	"IsOpen":   errors.New("db already open"),
 	"UriParse": nil,
+	"InvalidDriver": nil,
 }
 
 func get(typ string) error {
@@ -32,7 +34,9 @@ func Set(typ string) error {
 	return last
 }
 
-func SetError(typ string, err error) error {
+func SetError(typ string, format string, args ...interface{}) error {
+	msg := fmt.Sprintf(format, args...)
+	err := errors.New(msg)
 	if get(typ) == nil {
 		last = err
 		reg[typ] = last
