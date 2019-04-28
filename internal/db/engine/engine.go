@@ -24,3 +24,16 @@ func Register(creator EngineCreator, driver ...string) {
 		reg[drv] = creator
 	}
 }
+
+func Drivers() []string {
+	l := make([]string, 0)
+	for n := range reg {
+		l = append(l, n)
+	}
+	return l
+}
+
+func HasDriver(name string) bool {
+	_, ok := reg[name]
+	return ok
+}
