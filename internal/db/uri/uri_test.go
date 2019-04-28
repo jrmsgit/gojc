@@ -5,6 +5,8 @@ package uri
 
 import (
 	"testing"
+
+	"github.com/jrmsdev/gojc/db/dberr"
 )
 
 func check(t *testing.T, name string, got, expect interface{}) {
@@ -49,10 +51,10 @@ func TestParserError(t *testing.T) {
 
 func TestNoDriver(t *testing.T) {
 	_, err := Parse("")
-	check(t, "parse error", err.Error(), "db driver not set")
+	check(t, "parse error", err, dberr.NoDriver)
 }
 
 func TestNoDBName(t *testing.T) {
 	_, err := Parse("driver:")
-	check(t, "parse error", err.Error(), "db name not set")
+	check(t, "parse error", err, dberr.NoDBName)
 }

@@ -4,8 +4,9 @@
 package uri
 
 import (
-	"errors"
 	"net/url"
+
+	"github.com/jrmsdev/gojc/db/dberr"
 )
 
 type URI struct {
@@ -37,10 +38,10 @@ func Parse(rawuri string) (*URI, error) {
 
 func checkArgs(u *url.URL) error {
 	if u.Scheme == "" {
-		return errors.New("db driver not set")
+		return dberr.NoDriver
 	}
 	if u.Path == "" {
-		return errors.New("db name not set")
+		return dberr.NoDBName
 	}
 	return nil
 }

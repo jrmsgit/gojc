@@ -4,15 +4,14 @@
 package memdb
 
 import (
-	"errors"
-
+	"github.com/jrmsdev/gojc/db/dberr"
 	"github.com/jrmsdev/gojc/internal/db/record"
 	"github.com/jrmsdev/gojc/internal/db/uri"
 )
 
 func (d *DB) Open(u *uri.URI) error {
 	if d.data != nil {
-		return errors.New("db already open")
+		return dberr.IsOpen
 	}
 	d.data = make(map[string]*record.Record)
 	return nil
