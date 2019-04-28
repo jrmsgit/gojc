@@ -9,9 +9,12 @@ import (
 )
 
 type URI struct {
-	Driver string
-	DBName string
-	Host   string
+	Driver   string
+	DBName   string
+	Host     string
+	Port     string
+	Username string
+	encPassw string
 }
 
 func Parse(rawuri string) (*URI, error) {
@@ -24,8 +27,11 @@ func Parse(rawuri string) (*URI, error) {
 	}
 	r := new(URI)
 	r.Driver = u.Scheme
-	r.DBName = u.Path
-	r.Host = u.Host
+	r.DBName = u.EscapedPath()
+	r.Host = u.Hostname()
+	r.Port = u.Port()
+	r.Username = u.User.Username()
+	r.encPassw, _ = u.User.Password()
 	return r, nil
 }
 
@@ -37,4 +43,9 @@ func checkArgs(u *url.URL) error {
 		return errors.New("db name not set")
 	}
 	return nil
+}
+
+func (u *URI) GetPassword() string {
+	// TODO: return decoded encPassw
+	return u.encPassw
 }
