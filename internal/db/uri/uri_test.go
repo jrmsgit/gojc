@@ -46,15 +46,15 @@ func TestParse(t *testing.T) {
 
 func TestParserError(t *testing.T) {
 	_, err := Parse("::")
-	check(t, "parse error", err.Error(), "parse ::: missing protocol scheme")
+	check(t, "UriParse error", dberr.Is("UriParse", err), true)
 }
 
 func TestNoDriver(t *testing.T) {
 	_, err := Parse("")
-	check(t, "parse error", err, dberr.NoDriver)
+	check(t, "NoDriver error", dberr.Is("NoDriver", err), true)
 }
 
 func TestNoDBName(t *testing.T) {
 	_, err := Parse("driver:")
-	check(t, "parse error", err, dberr.NoDBName)
+	check(t, "NoDBName error", dberr.Is("NoDBName", err), true)
 }

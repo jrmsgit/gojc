@@ -11,7 +11,7 @@ import (
 
 func (d *DB) Open(u *uri.URI) error {
 	if d.data != nil {
-		return dberr.IsOpen
+		return dberr.Set("IsOpen")
 	}
 	d.data = make(map[string]*record.Record)
 	return nil

@@ -21,7 +21,7 @@ type URI struct {
 func Parse(rawuri string) (*URI, error) {
 	u, err := url.Parse(rawuri)
 	if err != nil {
-		return nil, err
+		return nil, dberr.SetError("UriParse", err)
 	}
 	if err := checkArgs(u); err != nil {
 		return nil, err
@@ -38,10 +38,10 @@ func Parse(rawuri string) (*URI, error) {
 
 func checkArgs(u *url.URL) error {
 	if u.Scheme == "" {
-		return dberr.NoDriver
+		return dberr.Set("NoDriver")
 	}
 	if u.Path == "" {
-		return dberr.NoDBName
+		return dberr.Set("NoDBName")
 	}
 	return nil
 }

@@ -7,6 +7,46 @@ import (
 	"errors"
 )
 
-var NoDriver = errors.New("db driver not set")
-var NoDBName = errors.New("db name not set")
-var IsOpen = errors.New("db already open")
+var last error
+var reg = map[string]error{
+	"NoDriver": errors.New("db driver not set"),
+	"NoDBName": errors.New("db name not set"),
+	"IsOpen":   errors.New("db already open"),
+	"UriParse": nil,
+}
+
+func get(typ string) error {
+	e, ok := reg[typ]
+	if !ok {
+		return errors.New("InvalidErrorType:" + typ)
+	}
+	return e
+}
+
+func Last() error {
+	return last
+}
+
+func Set(typ string) error {
+	last = get(typ)
+	return last
+}
+
+func SetError(typ string, err error) error {
+	if get(typ) == nil {
+		last = err
+		reg[typ] = last
+	} else {
+		e := errors.New("SetInvalidErrorType:" + typ)
+		last = e
+	}
+	return last
+}
+
+func Clear() {
+	last = nil
+}
+
+func Is(typ string, err error) bool {
+	return err == get(typ)
+}
