@@ -16,6 +16,7 @@ var reg = map[string]error{
 	"NotOpen":       errors.New("db is not open"),
 	"UriParse":      nil,
 	"InvalidDriver": nil,
+	"KeyExists":     nil,
 }
 
 func get(typ string) error {

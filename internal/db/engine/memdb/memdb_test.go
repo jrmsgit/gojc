@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/jrmsdev/gojc/db/dberr"
+	"github.com/jrmsdev/gojc/internal/db/engine"
 	"github.com/jrmsdev/gojc/internal/db/uri"
 )
 
@@ -26,7 +27,7 @@ func TestOpen(t *testing.T) {
 	err = eng.Open(u)
 	check(t, "open error", err, nil)
 	err = eng.Open(u)
-	check(t, "IsOpen error", dberr.Is("IsOpen", err), true)
+	check(t, "is IsOpen error", dberr.Is("IsOpen", err), true)
 }
 
 func TestClose(t *testing.T) {
@@ -42,5 +43,41 @@ func TestClose(t *testing.T) {
 	err = eng.Close()
 	check(t, "close error", err, nil)
 	err = eng.Close()
-	check(t, "NotOpen error", dberr.Is("NotOpen", err), true)
+	check(t, "is NotOpen error", dberr.Is("NotOpen", err), true)
+}
+
+func newEngine(t *testing.T) engine.Engine {
+	t.Helper()
+	u, err := uri.Parse("db:/test")
+	if err != nil {
+		t.Fatal(err)
+	}
+	eng := New()
+	err = eng.Open(u)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return eng
+}
+
+func TestSet(t *testing.T) {
+	eng := newEngine(t)
+	defer eng.Close()
+	err := eng.Set("testing", "data")
+	check(t, "set error", err, nil)
+	err = eng.Set("testing", "data")
+	check(t, "is KeyExists error", dberr.Is("KeyExists", err), true)
+}
+
+func TestGet(t *testing.T) {
+	eng := newEngine(t)
+	defer eng.Close()
+	err := eng.Set("testing", "data")
+	if err != nil {
+		t.Fatal(err)
+	}
+	val := eng.Get("testing")
+	check(t, "get value", val, "data")
+	val = eng.Get("nokey")
+	check(t, "get unset key value", val, "")
 }
