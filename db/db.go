@@ -37,3 +37,11 @@ func (d *DB) Get(key string) string {
 func (d *DB) Set(key, val string) error {
 	return d.eng.Set(key, val)
 }
+
+func (d *DB) Update(key, val string) error {
+	return d.eng.Update(key, val)
+}
+
+func (d *DB) Delete(key string) error {
+	return d.eng.Delete(key)
+}

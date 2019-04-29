@@ -10,21 +10,16 @@ import (
 
 var last error
 var reg = map[string]error{
-	"NoDriver":      errors.New("db driver not set"),
-	"NoDBName":      errors.New("db name not set"),
-	"IsOpen":        errors.New("db already open"),
-	"NotOpen":       errors.New("db is not open"),
+	"NoDriver": errors.New("db driver not set"),
+	"NoDBName": errors.New("db name not set"),
+	"IsOpen":   errors.New("db already open"),
+	"NotOpen":  errors.New("db is not open"),
+}
+var setreg = map[string]error{
 	"UriParse":      nil,
 	"InvalidDriver": nil,
 	"KeyExists":     nil,
-}
-
-func get(typ string) error {
-	e, ok := reg[typ]
-	if !ok {
-		return errors.New("InvalidErrorType:" + typ)
-	}
-	return e
+	"KeyNotFound":   nil,
 }
 
 func Last() error {
@@ -32,20 +27,21 @@ func Last() error {
 }
 
 func Set(typ string) error {
-	last = get(typ)
+	e, ok := reg[typ]
+	if !ok {
+		return errors.New("InvalidErrorType:" + typ)
+	}
+	last = e
 	return last
 }
 
 func SetError(typ string, format string, args ...interface{}) error {
-	msg := fmt.Sprintf(format, args...)
-	err := errors.New(msg)
-	if get(typ) == nil {
-		last = err
-		reg[typ] = last
-	} else {
-		e := errors.New("SetInvalidErrorType:" + typ)
-		last = e
+	_, ok := setreg[typ]
+	if !ok {
+		return errors.New("SetInvalidErrorType:" + typ)
 	}
+	last = errors.New(fmt.Sprintf(format, args...))
+	setreg[typ] = last
 	return last
 }
 
@@ -54,5 +50,13 @@ func Clear() {
 }
 
 func Is(typ string, err error) bool {
-	return err == get(typ)
+	x, ok := reg[typ]
+	if ok {
+		return err == x
+	}
+	x, ok = setreg[typ]
+	if !ok {
+		x = errors.New("IsInvalidErrorType:" + typ)
+	}
+	return err == x
 }

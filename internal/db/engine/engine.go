@@ -13,6 +13,8 @@ type Engine interface {
 	Close() error
 	Get(key string) string
 	Set(key, val string) error
+	Update(key, val string) error
+	Delete(key string) error
 }
 
 type EngineCreator func() Engine

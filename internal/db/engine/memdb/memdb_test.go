@@ -81,3 +81,32 @@ func TestGet(t *testing.T) {
 	val = eng.Get("nokey")
 	check(t, "get unset key value", val, "")
 }
+
+func TestUpdate(t *testing.T) {
+	eng := newEngine(t)
+	defer eng.Close()
+	err := eng.Set("testing", "data")
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = eng.Update("testing", "newdata")
+	check(t, "update error", err, nil)
+	val := eng.Get("testing")
+	check(t, "updated value", val, "newdata")
+	err = eng.Update("test", "data")
+	check(t, "is KeyNotFound error", dberr.Is("KeyNotFound", err), true)
+}
+
+func TestDelete(t *testing.T) {
+	eng := newEngine(t)
+	defer eng.Close()
+	err := eng.Set("testing", "data")
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = eng.Delete("testing")
+	check(t, "delete error", err, nil)
+	err = eng.Delete("testing")
+	t.Log(err)
+	check(t, "is KeyNotFound error", dberr.Is("KeyNotFound", err), true)
+}
