@@ -11,6 +11,8 @@ import (
 type Engine interface {
 	Open(*uri.URI) error
 	Close() error
+	Get(key string) string
+	Set(key, val string) error
 }
 
 type EngineCreator func() Engine

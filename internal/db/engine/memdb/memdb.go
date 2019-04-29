@@ -5,7 +5,7 @@ package memdb
 
 import (
 	"github.com/jrmsdev/gojc/internal/db/engine"
-	"github.com/jrmsdev/gojc/internal/db/record"
+	//~ "github.com/jrmsdev/gojc/internal/db/record"
 )
 
 func init() {
@@ -13,7 +13,8 @@ func init() {
 }
 
 type DB struct {
-	data map[string]*record.Record
+	//~ data map[string]*record.Record
+	data map[string]string
 }
 
 func New() engine.Engine {
