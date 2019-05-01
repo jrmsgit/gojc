@@ -3,6 +3,6 @@
 
 package db
 
-func (d *DB) Open() error {
-	return d.eng.Open(d.uri)
+func (d *DB) GetAll(key string) map[string]string {
+	return d.eng.GetAll(key)
 }

@@ -3,6 +3,6 @@
 
 package db
 
-func (d *DB) Open() error {
-	return d.eng.Open(d.uri)
+func (d *DB) Update(key, val string) error {
+	return d.eng.Update(key, val)
 }

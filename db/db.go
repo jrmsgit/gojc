@@ -14,6 +14,21 @@ type DB struct {
 	eng engine.Engine
 }
 
+func New(rawuri string) (*DB, error) {
+	d := new(DB)
+	if u, err := uri.Parse(rawuri); err != nil {
+		return nil, err
+	} else {
+		d.uri = u
+	}
+	if eng, err := engine.Get(d.uri); err != nil {
+		return nil, err
+	} else {
+		d.eng = eng
+	}
+	return d, nil
+}
+
 func (d *DB) Name() string {
 	return d.uri.DBName
 }
@@ -24,28 +39,4 @@ func (d *DB) Failed() bool {
 
 func (d *DB) Error() error {
 	return dberr.Last()
-}
-
-func (d *DB) Close() error {
-	return d.eng.Close()
-}
-
-func (d *DB) Get(key string) string {
-	return d.eng.Get(key)
-}
-
-func (d *DB) GetAll(key string) map[string]string {
-	return d.eng.GetAll(key)
-}
-
-func (d *DB) Set(key, val string) error {
-	return d.eng.Set(key, val)
-}
-
-func (d *DB) Update(key, val string) error {
-	return d.eng.Update(key, val)
-}
-
-func (d *DB) Delete(key string) error {
-	return d.eng.Delete(key)
 }

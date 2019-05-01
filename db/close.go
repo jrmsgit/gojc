@@ -3,6 +3,6 @@
 
 package db
 
-func (d *DB) Open() error {
-	return d.eng.Open(d.uri)
+func (d *DB) Close() error {
+	return d.eng.Close()
 }
