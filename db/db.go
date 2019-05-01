@@ -5,6 +5,7 @@ package db
 
 import (
 	"github.com/jrmsdev/gojc/db/dberr"
+	"github.com/jrmsdev/gojc/db/schema"
 	"github.com/jrmsdev/gojc/internal/db/engine"
 	"github.com/jrmsdev/gojc/internal/db/uri"
 )
@@ -12,6 +13,7 @@ import (
 type DB struct {
 	uri *uri.URI
 	eng engine.Engine
+	Schema *schema.Schema
 }
 
 func New(rawuri string) (*DB, error) {
@@ -26,6 +28,7 @@ func New(rawuri string) (*DB, error) {
 	} else {
 		d.eng = eng
 	}
+	d.Schema = schema.New()
 	return d, nil
 }
 

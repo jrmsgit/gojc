@@ -5,13 +5,14 @@ package engine
 
 import (
 	"github.com/jrmsdev/gojc/db/dberr"
+	"github.com/jrmsdev/gojc/internal/db/query"
 	"github.com/jrmsdev/gojc/internal/db/uri"
 )
 
 type Engine interface {
 	Open(*uri.URI) error
 	Close() error
-	Get(key string) string
+	Get(*query.Query) string
 	GetAll(key string) map[string]string
 	Set(key, val string) error
 	Update(key, val string) error

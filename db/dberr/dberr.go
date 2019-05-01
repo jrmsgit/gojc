@@ -9,17 +9,20 @@ import (
 )
 
 var last error
+
 var reg = map[string]error{
 	"NoDriver": errors.New("db driver not set"),
 	"NoDBName": errors.New("db name not set"),
 	"IsOpen":   errors.New("db already open"),
 	"NotOpen":  errors.New("db is not open"),
 }
+
 var setreg = map[string]error{
 	"UriParse":      nil,
 	"InvalidDriver": nil,
 	"KeyExists":     nil,
 	"KeyNotFound":   nil,
+	"SchemaError":   nil,
 }
 
 func Last() error {

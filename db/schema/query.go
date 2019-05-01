@@ -1,12 +1,12 @@
 // Copyright (c) Jeremías Casteglione <jrmsdev@gmail.com>
 // See LICENSE file.
 
-package memdb
+package schema
 
 import (
 	"github.com/jrmsdev/gojc/internal/db/query"
 )
 
-func (d *DB) Get(q *query.Query) string {
-	return d.data[q.Key()]
+func Query(s *Schema, key string) (*query.Query, error) {
+	return query.New(key), nil
 }

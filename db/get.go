@@ -3,6 +3,16 @@
 
 package db
 
+import (
+	"github.com/jrmsdev/gojc/db/dberr"
+	"github.com/jrmsdev/gojc/db/schema"
+)
+
 func (d *DB) Get(key string) string {
-	return d.eng.Get(key)
+	q, err := schema.Query(d.Schema, key)
+	if err != nil {
+		dberr.SetError("SchemaError", "%s", err)
+		return ""
+	}
+	return d.eng.Get(q)
 }
