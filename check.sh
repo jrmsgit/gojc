@@ -1,5 +1,5 @@
 #!/bin/sh -eu
 ARGS=${@:-'./...'}
-go vet ${ARGS}
 gofmt -w -s -l .
+go vet ${ARGS}
 exec ./test.sh ${ARGS}

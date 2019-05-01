@@ -12,6 +12,7 @@ type Engine interface {
 	Open(*uri.URI) error
 	Close() error
 	Get(key string) string
+	GetAll(key string) map[string]string
 	Set(key, val string) error
 	Update(key, val string) error
 	Delete(key string) error

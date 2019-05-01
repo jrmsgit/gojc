@@ -34,6 +34,10 @@ func (d *DB) Get(key string) string {
 	return d.eng.Get(key)
 }
 
+func (d *DB) GetAll(key string) map[string]string {
+	return d.eng.GetAll(key)
+}
+
 func (d *DB) Set(key, val string) error {
 	return d.eng.Set(key, val)
 }

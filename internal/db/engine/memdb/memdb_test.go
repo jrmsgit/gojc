@@ -82,6 +82,30 @@ func TestGet(t *testing.T) {
 	check(t, "get unset key value", val, "")
 }
 
+func TestGetAll(t *testing.T) {
+	eng := newEngine(t)
+	defer eng.Close()
+	err := eng.Set("testing.f0", "v0")
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = eng.Set("testing.f1", "v1")
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = eng.Set("test.f2", "v2")
+	if err != nil {
+		t.Fatal(err)
+	}
+	rst := eng.GetAll("testing")
+	check(t, "get f0 value", rst["f0"], "v0")
+	check(t, "get f1 value", rst["f1"], "v1")
+	check(t, "get f2 value", rst["f2"], "")
+	rst = eng.GetAll("test")
+	check(t, "get 2nd f0 value", rst["f0"], "")
+	check(t, "get 2nd f2 value", rst["f2"], "v2")
+}
+
 func TestUpdate(t *testing.T) {
 	eng := newEngine(t)
 	defer eng.Close()
