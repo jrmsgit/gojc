@@ -22,7 +22,6 @@ var setreg = map[string]error{
 	"InvalidDriver": nil,
 	"KeyExists":     nil,
 	"KeyNotFound":   nil,
-	"SchemaError":   nil,
 }
 
 func Last() error {

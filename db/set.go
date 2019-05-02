@@ -3,6 +3,14 @@
 
 package db
 
+import (
+	"github.com/jrmsdev/gojc/db/schema"
+)
+
 func (d *DB) Set(key, val string) error {
-	return d.eng.Set(key, val)
+	stmt := schema.Stmt(d.Schema, key)
+	if d.Failed() {
+		return d.Error()
+	}
+	return d.eng.Set(stmt, val)
 }

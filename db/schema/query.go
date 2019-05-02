@@ -7,6 +7,6 @@ import (
 	"github.com/jrmsdev/gojc/internal/db/query"
 )
 
-func Query(s *Schema, key string) (*query.Query, error) {
-	return query.New(key), nil
+func Query(s *Schema, key string) *query.Query {
+	return query.New(key)
 }

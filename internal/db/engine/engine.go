@@ -6,15 +6,16 @@ package engine
 import (
 	"github.com/jrmsdev/gojc/db/dberr"
 	"github.com/jrmsdev/gojc/internal/db/query"
+	"github.com/jrmsdev/gojc/internal/db/statement"
 	"github.com/jrmsdev/gojc/internal/db/uri"
 )
 
 type Engine interface {
 	Open(*uri.URI) error
 	Close() error
-	Get(*query.Query) string
+	Get(q *query.Query) string
 	GetAll(key string) map[string]string
-	Set(key, val string) error
+	Set(stmt *statement.Stmt, val string) error
 	Update(key, val string) error
 	Delete(key string) error
 }
