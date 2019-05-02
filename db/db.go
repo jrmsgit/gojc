@@ -11,8 +11,8 @@ import (
 )
 
 type DB struct {
-	uri *uri.URI
-	eng engine.Engine
+	uri    *uri.URI
+	eng    engine.Engine
 	Schema *schema.Schema
 }
 

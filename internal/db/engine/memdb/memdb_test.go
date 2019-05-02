@@ -8,6 +8,8 @@ import (
 
 	"github.com/jrmsdev/gojc/db/dberr"
 	"github.com/jrmsdev/gojc/internal/db/engine"
+	"github.com/jrmsdev/gojc/internal/db/query"
+	"github.com/jrmsdev/gojc/internal/db/statement"
 	"github.com/jrmsdev/gojc/internal/db/uri"
 )
 
@@ -63,37 +65,44 @@ func newEngine(t *testing.T) engine.Engine {
 func TestSet(t *testing.T) {
 	eng := newEngine(t)
 	defer eng.Close()
-	err := eng.Set("testing", "data")
+	stmt := statement.New("testing")
+	err := eng.Set(stmt, "data")
 	check(t, "set error", err, nil)
-	err = eng.Set("testing", "data")
+	err = eng.Set(stmt, "data")
 	check(t, "is KeyExists error", dberr.Is("KeyExists", err), true)
 }
 
 func TestGet(t *testing.T) {
 	eng := newEngine(t)
 	defer eng.Close()
-	err := eng.Set("testing", "data")
+	stmt := statement.New("testing")
+	err := eng.Set(stmt, "data")
 	if err != nil {
 		t.Fatal(err)
 	}
-	val := eng.Get("testing")
+	q := query.New("testing")
+	val := eng.Get(q)
 	check(t, "get value", val, "data")
-	val = eng.Get("nokey")
+	q = query.New("nokey")
+	val = eng.Get(q)
 	check(t, "get unset key value", val, "")
 }
 
 func TestGetAll(t *testing.T) {
 	eng := newEngine(t)
 	defer eng.Close()
-	err := eng.Set("testing.f0", "v0")
+	stmt := statement.New("testing.f0")
+	err := eng.Set(stmt, "v0")
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = eng.Set("testing.f1", "v1")
+	stmt = statement.New("testing.f1")
+	err = eng.Set(stmt, "v1")
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = eng.Set("test.f2", "v2")
+	stmt = statement.New("test.f2")
+	err = eng.Set(stmt, "v2")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -109,13 +118,15 @@ func TestGetAll(t *testing.T) {
 func TestUpdate(t *testing.T) {
 	eng := newEngine(t)
 	defer eng.Close()
-	err := eng.Set("testing", "data")
+	stmt := statement.New("testing")
+	err := eng.Set(stmt, "data")
 	if err != nil {
 		t.Fatal(err)
 	}
 	err = eng.Update("testing", "newdata")
 	check(t, "update error", err, nil)
-	val := eng.Get("testing")
+	q := query.New("testing")
+	val := eng.Get(q)
 	check(t, "updated value", val, "newdata")
 	err = eng.Update("test", "data")
 	check(t, "is KeyNotFound error", dberr.Is("KeyNotFound", err), true)
@@ -124,13 +135,13 @@ func TestUpdate(t *testing.T) {
 func TestDelete(t *testing.T) {
 	eng := newEngine(t)
 	defer eng.Close()
-	err := eng.Set("testing", "data")
+	stmt := statement.New("testing")
+	err := eng.Set(stmt, "data")
 	if err != nil {
 		t.Fatal(err)
 	}
 	err = eng.Delete("testing")
 	check(t, "delete error", err, nil)
 	err = eng.Delete("testing")
-	t.Log(err)
 	check(t, "is KeyNotFound error", dberr.Is("KeyNotFound", err), true)
 }

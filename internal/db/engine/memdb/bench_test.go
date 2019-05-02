@@ -4,10 +4,12 @@
 package memdb
 
 import (
-	"testing"
 	"strconv"
+	"testing"
 
 	"github.com/jrmsdev/gojc/internal/db/engine"
+	"github.com/jrmsdev/gojc/internal/db/query"
+	"github.com/jrmsdev/gojc/internal/db/statement"
 	"github.com/jrmsdev/gojc/internal/db/uri"
 )
 
@@ -29,26 +31,32 @@ func BenchmarkSet(b *testing.B) {
 	eng := benchEngine(b)
 	defer eng.Close()
 	for i := 0; i < b.N; i++ {
-		eng.Set(strconv.Itoa(i), "data")
+		stmt := statement.New(strconv.Itoa(i))
+		eng.Set(stmt, "data")
 	}
 }
 
 func BenchmarkGet(b *testing.B) {
 	eng := benchEngine(b)
 	defer eng.Close()
-	eng.Set("testing", "data")
+	stmt := statement.New("testing")
+	eng.Set(stmt, "data")
+	q := query.New("testing")
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		eng.Get("testing")
+		eng.Get(q)
 	}
 }
 
 func BenchmarkGetAll(b *testing.B) {
 	eng := benchEngine(b)
 	defer eng.Close()
-	eng.Set("test.0", "data0")
-	eng.Set("test.1", "data1")
-	eng.Set("test.2", "data2")
+	stmt := statement.New("test.0")
+	eng.Set(stmt, "data0")
+	stmt = statement.New("test.1")
+	eng.Set(stmt, "data1")
+	stmt = statement.New("test.2")
+	eng.Set(stmt, "data2")
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		eng.GetAll("testing")
@@ -58,7 +66,8 @@ func BenchmarkGetAll(b *testing.B) {
 func BenchmarkUpdate(b *testing.B) {
 	eng := benchEngine(b)
 	defer eng.Close()
-	eng.Set("testing", "data")
+	stmt := statement.New("testing")
+	eng.Set(stmt, "data")
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		eng.Update("testing", "newdata")
@@ -69,7 +78,8 @@ func BenchmarkDelete(b *testing.B) {
 	eng := benchEngine(b)
 	defer eng.Close()
 	for i := 0; i < b.N; i++ {
-		eng.Set(strconv.Itoa(i), "data")
+		stmt := statement.New(strconv.Itoa(i))
+		eng.Set(stmt, "data")
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
